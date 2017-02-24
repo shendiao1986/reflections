@@ -200,31 +200,26 @@ public class Reflections {
                         }
                     }));
                 } else {
-                	
-					String surl = url.toString();
-					String first = surl.substring(0, surl.indexOf(":"));
-					
-					Object rr = null;
-					try {
-						rr = VfsUtils.getRoot(url);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					String root = rr.toString();
-					String s =  root.substring(root.lastIndexOf("=")+1,root.length()-1);
-					String all = first + s.substring(s.indexOf(":"));
-                	
-					try {
-						scan(new URL(all));
-					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-//					scan(url);
+					scan(url);
                 }
                 scannedUrls++;
             } catch (ReflectionsException e) {
-                if (log != null && log.isWarnEnabled()) log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
+				try {
+					String surl = url.toString();
+					String url_pre = surl.substring(0, surl.indexOf(":"));
+
+					Object rr = null;
+					rr = VfsUtils.getRoot(url);
+					String root = rr.toString();
+					String url_suf = root.substring(root.lastIndexOf("=") + 1, root.length() - 1);
+					String url_all = url_pre + url_suf.substring(url_suf.indexOf(":"));
+
+					scan(new URL(url_all));
+					scannedUrls++;
+				} catch (Exception e1) {
+					if (log != null && log.isWarnEnabled()) log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
+				}
+//				if (log != null && log.isWarnEnabled()) log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
             }
         }
 
