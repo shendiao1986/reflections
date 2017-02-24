@@ -4,7 +4,7 @@
 
     <groupId>org.reflections</groupId>
     <artifactId>reflections</artifactId>
-    <version>0.9.12</version>
+    <version>0.9.13</version>
     <packaging>jar</packaging>
 
     <name>Reflections</name>
@@ -125,6 +125,12 @@
             <version>4.5</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+		    <groupId>commons-logging</groupId>
+		    <artifactId>commons-logging</artifactId>
+		    <version>1.2</version>
+		</dependency>
 
     </dependencies>
 

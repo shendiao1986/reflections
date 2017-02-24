@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -199,7 +200,27 @@ public class Reflections {
                         }
                     }));
                 } else {
-                    scan(url);
+                	
+					String surl = url.toString();
+					String first = surl.substring(0, surl.indexOf(":"));
+					
+					Object rr = null;
+					try {
+						rr = VfsUtils.getRoot(url);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String root = rr.toString();
+					String s =  root.substring(root.lastIndexOf("=")+1,root.length()-1);
+					String all = first + s.substring(s.indexOf(":"));
+                	
+					try {
+						scan(new URL(all));
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+//					scan(url);
                 }
                 scannedUrls++;
             } catch (ReflectionsException e) {

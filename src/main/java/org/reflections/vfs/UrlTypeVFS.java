@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.reflections.Reflections;
 import org.reflections.ReflectionsException;
+import org.reflections.VfsUtils;
 import org.reflections.vfs.Vfs.Dir;
 import org.reflections.vfs.Vfs.UrlType;
 
@@ -47,6 +48,18 @@ public class UrlTypeVFS implements UrlType {
 				return new ZipDir(new JarFile(url.getFile()));
 			} catch (IOException e1) {
 				try {
+//					String surl = url.toString();
+//					String first = surl.substring(0, surl.indexOf(":"));
+//					
+//					Object rr = VfsUtils.getRoot(url);
+//					String root = rr.toString();
+//					String s =  root.substring(root.lastIndexOf("=")+1,root.length()-1);
+//					String all = first + s.substring(s.indexOf(":"));
+//					URL adaptedUrl1 = adaptURL(new URL(all));
+//					if (Vfs.getFile(adaptedUrl1).isDirectory()) {
+//						return new SystemDir(Vfs.getFile(adaptedUrl1));
+//					}
+					
 					URL adaptedUrl = adaptURL(url);
 					if (Vfs.getFile(adaptedUrl).isDirectory()) {
 						return new SystemDir(Vfs.getFile(adaptedUrl));
@@ -65,7 +78,7 @@ public class UrlTypeVFS implements UrlType {
 
 	public URL adaptURL(URL url) throws MalformedURLException {
 		if (VFSZIP.equals(url.getProtocol())) {
-			return replaceZipSeparators(url.getPath(), realFile);
+			return new URL(url.toString().replace(VFSZIP, "file"));
 		} else if (VFSFILE.equals(url.getProtocol())) {
 			return new URL(url.toString().replace(VFSFILE, "file"));
 		} else {
